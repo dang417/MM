@@ -4,7 +4,7 @@
   <h1>{{person.username}}님의 프로필</h1>
   <div>
     팔로잉 :
-    {{person.user_fllowings.count}}
+    {{person.user_fllowings|length}}
     | 팔로워 :
     {{person.followers.count}}
   </div>
@@ -31,7 +31,7 @@
   <hr><br><br>
 
   <h5>{{person.username}}님이 좋아한 영화</h5>
-  {% for movie in person.like_moives.all %}
+  {% for movie in person.like_movies.all %}
     <div class='card'>
       <div class='card-body'>
         <h5 class='card-title'>{{movie.title}}</h5>

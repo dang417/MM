@@ -11,9 +11,6 @@ class Movie(models.Model):
         settings.AUTH_USER_MODEL, related_name='like_movies')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    movie_like_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, symmetrical=True, related_name='liked_movie')
-
 
 class Comment(models.Model):
     content = models.CharField(max_length=100)
