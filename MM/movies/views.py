@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Movie, Comment
 from .forms import MovieForm, CommentForm
-from django.conf import settings
+from django.views.decorators.http import require_POST
+
 # Create your views here.
 
 
@@ -12,17 +13,19 @@ def index(request):
 
 
 def create(request):
-    if request.method == "POST":
-        form = MovieForm(request.POST)
-        if form.is_valid():
-            movie = form.save(commit=False)
-            movie.user = request.user
-            movie.save()
-            return redirect('movies:index')
-    else:
-        form = MovieForm()
-    context = {'form': form}
-    return render(request, 'movies/create.html', context)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = MovieForm(request.POST)
+            if form.is_valid():
+                movie = form.save(commit=False)
+                movie.user = request.user
+                movie.save()
+                return redirect('movies:index')
+        else:
+            form = MovieForm()
+        context = {'form': form}
+        return render(request, 'movies/create.html', context)
+    return redirect('accounts:login')
 
 
 def detail(request, pk):
@@ -50,6 +53,7 @@ def update(request, pk):
     return render(request, 'movies/update.html', context)
 
 
+@require_POST
 def delete(request, pk):
     movie = Movie.objects.get(pk=pk)
     movie.delete()
@@ -67,11 +71,20 @@ def comments_create(request, pk):
     return redirect('movies:detail', movie.pk)
 
 
+@require_POST
 def comments_delete(request, movie_pk, comments_pk):
     comment = Comment.objects.get(pk=comments_pk)
     comment.delete()
     return redirect('movies:detail', movie_pk)
 
 
-def likes(request, pk):
-    return
+@require_POST
+def likes(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = Movie.objects.get(pk=movie_pk)
+        if movie.like_users.filter(pk=request.user.pk).exists():
+            movie.like_users.remove(request.user)
+        else:
+            movie.like_users.add(request.user)
+        return redirect('movies:index')
+    return redirect('accounts:login')
