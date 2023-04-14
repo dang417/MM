@@ -53,7 +53,7 @@ def update(request, pk):
     return render(request, 'movies/update.html', context)
 
 
-@require_POST
+@ require_POST
 def delete(request, pk):
     movie = Movie.objects.get(pk=pk)
     movie.delete()
@@ -71,14 +71,14 @@ def comments_create(request, pk):
     return redirect('movies:detail', movie.pk)
 
 
-@require_POST
+@ require_POST
 def comments_delete(request, movie_pk, comments_pk):
     comment = Comment.objects.get(pk=comments_pk)
     comment.delete()
     return redirect('movies:detail', movie_pk)
 
 
-@require_POST
+@ require_POST
 def likes(request, movie_pk):
     if request.user.is_authenticated:
         movie = Movie.objects.get(pk=movie_pk)

@@ -15,3 +15,6 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ('movie', 'user',)
+        labels = {
+            'content': (""),
+        }

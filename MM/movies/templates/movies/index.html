@@ -1,23 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>INDEX</h1>
-  <a href="{% url 'movies:create' %}">[CREATE]</a>
-  <hr>
-  {% for movie in movies %}
-    <a href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
-
-    <div>
-      <form action="{% url 'movies:likes' movie.pk%}" method="POST">
-        {% csrf_token %}
-        {% if request.user in movie.like_users.all %}
-          <input type="submit" value="좋아요 취소">
-        {% else %}
-          <input type="submit" value="좋아요">
-        {% endif %}
-      </form>
-    </div>
-    <hr>
-  {% endfor %}
-
-{% endblock content %}
+  <div class="ms-5">
+    <h1>INDEX</h1>
+    <a class="btn btn-outline-light" href="{% url 'movies:create' %}">CREATE</a>
+    <br><br><br><br>
+    {% for movie in movies %}
+      <div class="card bg-transparent border-light w-50 mb-4">
+        <a style="text-decoration:none" class="ms-3 mt-2 text-white " href="{% url 'accounts:profile' movie.user %}">{{ movie.user }}</a>
+        <div class="d-flex align-content-center justify-content-between">
+          <a style="text-decoration:none" class="mt-2 ms-3 text-white fs-4" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
+          <form class="ms-3 me-3 mb-4" action="{% url 'movies:likes' movie.pk%}" method="POST">
+            {% csrf_token %}
+            {% if request.user in movie.like_users.all %}
+              <input class="btn btn-outline-light text-danger" type="submit" value="♥">
+            {% else %}
+              <input class="btn btn-outline-light text-danger" type="submit" value="♡">
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% endblock content %}

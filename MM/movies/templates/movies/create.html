@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
-
+{% load bootstrap5 %}
 {% block content %}
-  <h1>CREATE</h1>
-  <form action="{% url 'movies:create' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-  </form>
-  <hr>
-  <a href="{% url 'movies:index' %}">BACK</a>
+  <div class="ms-5">
+    <h1>CREATE</h1>
+    <form class="w-50" action="{% url 'movies:create' %}" method="POST">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <input class="btn btn-outline-light" type="submit" value="Submit">
+    </form>
+    <hr>
+    <a class="btn btn-outline-light" href="{% url 'movies:index' %}">BACK</a>
+  </div>
 {% endblock content %}

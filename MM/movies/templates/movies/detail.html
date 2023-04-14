@@ -1,39 +1,44 @@
 {% extends 'base.html' %}
-
+{% load bootstrap5 %}
 {% block content %}
-  <h1>DETAIL</h1>
-  <hr><br>
-  <h3>{{ movie.title }}</h3>
-  <br>
-  <h5>{{ movie.description }}</h5>
-  {% if request.user.id == movie.user_id %}
-    <a href="{% url 'movies:update' movie.pk %}">UPDATE</a>
-    <form action="{% url 'movies:delete' movie.pk%}" method="POST">
-      {% csrf_token %}
-      <input type="submit" value="DELETE">
-    </form>
-  {% endif %}
-  <a href="{% url 'movies:index' %}">BACK</a>
-  {% if user.is_authenticated %}
-    <form action="{% url 'movies:comments_create' movie.pk %}" method="POST">
-      {% csrf_token %}
-      {{ comment_form }}
-      <input type="submit" value="작성하기">
-    </form>
-  {% endif %}
-  <hr>
-  <h2>댓글 목록</h2>
-  <ul>
-    {% for comment in comments %}
-      <li>{{ comment.content }}</li>
-      {% if request.user.id == comment.user_id %}
-        <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}" method="POST">
+  <div class="ms-5">
+    <h1>DETAIL</h1>
+    <br>
+    <div class="card bg-transparent border-light text-white w-50 p-3">
+      <h3>{{ movie.title }}</h3>
+      <br>
+      <h5>{{ movie.description }}</h5>
+      {% if request.user.id == movie.user_id %}
+        <a class="btn btn-outline-light" href="{% url 'movies:update' movie.pk %}">UPDATE</a>
+        <form action="{% url 'movies:delete' movie.pk%}" method="POST">
           {% csrf_token %}
-          <input type="submit" value="DELETE">
+          <input class="btn btn-outline-light" type="submit" value="DELETE">
         </form>
       {% endif %}
-    {% endfor %}
-  </ul>
-  <br>
-
+    </div>
+    <br><br>
+    {% if user.is_authenticated %}
+      <h4>Create Comment</h4>
+      <form action="{% url 'movies:comments_create' movie.pk %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input class="btn btn-outline-light" type="submit" value="Submit">
+      </form>
+    {% endif %}
+    <br>
+    <h3>Comments</h3>
+    <ul>
+      {% for comment in comments %}
+        <li>{{ comment.content }}</li>
+        {% if request.user.id == comment.user_id %}
+          <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}" method="POST">
+            {% csrf_token %}
+            <input class="btn btn-outline-light" type="submit" value="DELETE">
+          </form>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <br>
+    <a class="btn btn-outline-light" href="{% url 'movies:index' %}">BACK</a>
+  </div>
 {% endblock content %}
