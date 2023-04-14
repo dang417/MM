@@ -2,4 +2,16 @@
 
 {% block content %}
   <h1>DETAIL</h1>
+  <h3>{{ movie.title }}</h3>
+  <br>
+  <h5>{{ movie.description }}</h5>
+  <a href="{% url 'movies:update' %}">UPDATE</a>
+  <form action="{% url 'movies:delete' movie.pk%}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="DELETE">
+  </form>
+  <a href="{% url 'movies:index' %}">BACK</a>
+  <hr>
+  <h2>댓글 목록</h2>
+  <br>
 {% endblock content %}
