@@ -11,6 +11,7 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 # Create your views here.
 
+
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -20,12 +21,14 @@ def login(request):
     else:
         form = AuthenticationForm()
 
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'accounts/login.html', context)
+
 
 def logout(request):
     auth_logout(request)
     return redirect('movies:index')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -36,8 +39,9 @@ def signup(request):
             return redirect('movies:index')
     else:
         form = CustomUserCreationForm()
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'accounts/signup.html', context)
+
 
 @require_http_methods(['POST'])
 def delete(request):
@@ -45,12 +49,13 @@ def delete(request):
     auth_logout(request)
     return redirect('movies:index')
 
+
 def update(request):
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('movies:index') 
+            return redirect('movies:index')
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {'form': form}
@@ -63,18 +68,20 @@ def change_password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect('movies:index') 
+            return redirect('movies:index')
     else:
         form = PasswordChangeForm(request.user)
     context = {'form': form}
     return render(request, 'accounts/change_password.html', context)
 
+
 def profile(request, username):
     person = get_user_model().objects.get(username=username)
     context = {
-        'person':person,
+        'person': person,
     }
     return render(request, 'accounts/profile.html', context)
+
 
 @require_POST
 def follow(request, user_pk):
@@ -85,5 +92,5 @@ def follow(request, user_pk):
                 person.followers.remove(request.user)
             else:
                 person.followers.add(request.user)
-        return redirect('accounts:profile',person.username)
+        return redirect('accounts:profile', person.username)
     return redirect('accounts:login')

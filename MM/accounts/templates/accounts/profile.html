@@ -1,45 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{person.username}}님의 프로필</h1>
-  <div>
-    팔로잉 :
-    {{person.user_fllowings|length}}
-    | 팔로워 :
-    {{person.followers.count}}
+  <div class="ms-5">
+    <div class="d-flex">
+      <h1 class="me-4">Hi, I'm
+        {{person.username}}</h1>
+      <form class="mt-1" action="{% url 'accounts:follow' person.pk%}" method="POST">
+        {% csrf_token %}
+        {% if request.user in person.followers.all %}
+          <button type='submit' class='btn btn-outline-danger'>Unfollow</button>
+        {% else %}
+          <button type='submit' class='btn btn-outline-light'>Follow</button>
+        {% endif %}
+      </form>
+    </div>
+    <div class="d-flex ms-5">
+      팔로잉 :
+      {{person.followings.count}}
+      <div class="mx-2"></div>
+      팔로워 :
+      {{person.followers.count}}
+      <div class="mx-2"></div>
+
+    </div>
+    <br>
+    <br><br>
+    <div class="w-50 text-white">
+      <h3 class="mb-4">My Post</h3>
+      {% for movie in person.movie_set.all %}
+        <div class='card bg-transparent border-light text-white mb-3'>
+          <div class='card-body'>
+            <h5 class='card-title'>{{movie.title}}</h5>
+            <p class='card-text'>{{movie.content}}</p>
+            <a href="{% url 'movies:detail' movie.pk %}" class='btn btn-outline-light'>Detail</a>
+          </div>
+        </div>
+      {% endfor %}
+      <br><br>
+
+      <h3 class="mb-4">Liked Movies</h3>
+      {% for movie in person.like_movies.all %}
+        <div class='card bg-transparent border-light text-white mb-3'>
+          <div class='card-body'>
+            <h5 class='card-title'>{{movie.title}}</h5>
+            <p class='card-text'>{{movie.content}}</p>
+            <a href="{% url 'movies:detail' movie.pk %}" class='btn btn-outline-light'>Detail</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <br><br>
+    <a href="{% url 'movies:index' %}" class="btn btn-outline-light">목록</a>
   </div>
-  <form action="{% url 'accounts:follow' person.pk%}" method="POST">
-    {% csrf_token %}
-    {% if request.user in person.followers.all %}
-      <button type='submit' class='btn btn-danger'>언팔로우</button>
-    {% else %}
-      <button type='submit' class='btn btn-success'>팔로우</button>
-    {% endif %}
-  </form>
-  <hr>
 
-  <h5>{{person.username}}님이 작성한 영화</h5>
-  {% for movie in person.movie_set.all %}
-    <div class='card'>
-      <div class='card-body'>
-        <h5 class='card-title'>{{movie.title}}</h5>
-        <p class='card-text'>{{movie.content}}</p>
-        <a href="{% url 'movies:detail' movie.pk %}" class='btn btn-primary'>자세히 보기</a>
-      </div>
-    </div>
-  {% endfor %}
-  <hr><br><br>
-
-  <h5>{{person.username}}님이 좋아한 영화</h5>
-  {% for movie in person.like_movies.all %}
-    <div class='card'>
-      <div class='card-body'>
-        <h5 class='card-title'>{{movie.title}}</h5>
-        <p class='card-text'>{{movie.content}}</p>
-        <a href="{% url 'movies:detail' movie.pk %}" class='btn btn-primary'>자세히 보기</a>
-      </div>
-    </div>
-  {% endfor %}
-  <hr><br><br>
-  <a href="{% url 'movies:index' %}" class="btn btn-success">목록</a>
 {% endblock content %}

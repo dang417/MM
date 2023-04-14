@@ -1,0 +1,16 @@
+*{
+    color: #fff;
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+    background-image: url('./star.png');
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+.logo{
+width: 90px;
+height: 90px;
+}
