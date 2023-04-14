@@ -9,6 +9,8 @@ class Movie(models.Model):
     description = models.TextField()
     user_id = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    movie_like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, symmetrical=True, related_name='liked_movie')
 
 
 class Comment(models.Model):
