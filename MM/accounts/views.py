@@ -34,9 +34,9 @@ def signup(request):
             user = form.save()
             auth_login(request, user)
             return redirect('movies:index')
-        else:
-            form = CustomUserCreationForm()
-        context = {'form':form}
+    else:
+        form = CustomUserCreationForm()
+    context = {'form':form}
     return render(request, 'accounts/signup.html', context)
 
 @require_http_methods(['POST'])
