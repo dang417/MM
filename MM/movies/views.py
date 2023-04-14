@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Movie
-from .forms import MovieForm
+from .models import Movie, Comment
+from .forms import MovieForm, CommentForm
 # Create your views here.
 
 
@@ -24,7 +24,13 @@ def create(request):
 
 def detail(request, pk):
     movie = Movie.objects.get(pk=pk)
-    context = {'movie': movie}
+    comment_form = CommentForm()
+    comments = movie.comment_set.all()
+    context = {
+        'movie': movie,
+        'comment_form': comment_form,
+        'comments': comments,
+    }
     return render(request, 'movies/detail.html', context)
 
 
@@ -48,11 +54,19 @@ def delete(request, pk):
 
 
 def comments_create(request, pk):
-    return
+    movie = Movie.objects.get(pk=pk)
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.movie = movie
+        comment.save()
+    return redirect('movies:detail', movie.pk)
 
 
 def comments_delete(request, movie_pk, comments_pk):
-    return
+    comment = Comment.objects.get(pk=comments_pk)
+    comment.delete()
+    return redirect('movies:detail', movie_pk)
 
 
 def likes(request, pk):
