@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Movie, Comment
 from .forms import MovieForm, CommentForm
+from django.conf import settings
 # Create your views here.
 
 
@@ -14,7 +15,9 @@ def create(request):
     if request.method == "POST":
         form = MovieForm(request.POST)
         if form.is_valid():
-            form.save()
+            movie = form.save(commit=False)
+            movie.user = request.user
+            movie.save()
             return redirect('movies:index')
     else:
         form = MovieForm()
@@ -43,7 +46,7 @@ def update(request, pk):
             return redirect('movies:index')
     else:
         form = MovieForm(instance=movie)
-    context = {'form': form}
+    context = {'form': form, 'movie': movie}
     return render(request, 'movies/update.html', context)
 
 
@@ -59,6 +62,7 @@ def comments_create(request, pk):
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)
         comment.movie = movie
+        comment.user = request.user
         comment.save()
     return redirect('movies:detail', movie.pk)
 

@@ -7,7 +7,7 @@
   {% for movie in movies %}
     <a href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
 
-    <a class="btn" href="{% url 'movies:likes' %}">좋아요</a>
+    <a class="btn" href="#">좋아요</a>
     <hr>
   {% endfor %}
 
