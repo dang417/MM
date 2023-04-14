@@ -7,7 +7,7 @@ from django.conf import settings
 class Movie(models.Model):
     title = models.CharField(max_length=20)
     description = models.TextField()
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     movie_like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, symmetrical=True, related_name='liked_movie')
@@ -15,6 +15,6 @@ class Movie(models.Model):
 
 class Comment(models.Model):
     content = models.CharField(max_length=100)
-    movie_id = models.ForeignKey("Movie", on_delete=models.CASCADE)
-    user_id = models.ForeignKey(
+    movie = models.ForeignKey("Movie", on_delete=models.CASCADE)
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
