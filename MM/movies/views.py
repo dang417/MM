@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
-
+from .models import Movie
+from .forms import MovieForm
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'movies/index.html')
+    movies = Movie.objects.all()
+    context = {'movies': movies}
+    return render(request, 'movies/index.html', context)
 
 
 def create(request):
