@@ -21,11 +21,12 @@
   <ul>
     {% for comment in comments %}
       <li>{{ comment.content }}</li>
-      {% if user.pk == comment.user_id %}{% endif %}
-      <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="DELETE">
-      </form>
+      {% if user.pk == comment.user_id %}
+        <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="DELETE">
+        </form>
+      {% endif %}
     {% endfor %}
   </ul>
   <br>
