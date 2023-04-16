@@ -3,6 +3,7 @@
 {% block content %}
   <div class="ms-5">
     <h1>INDEX</h1>
+
     <a class="btn btn-outline-light" href="{% url 'movies:create' %}">CREATE</a>
     <br><br><br><br>
     {% for movie in movies %}
@@ -13,6 +14,7 @@
           <form class="ms-3 me-3 mb-4" action="{% url 'movies:likes' movie.pk%}" method="POST">
             {% csrf_token %}
             {% if request.user in movie.like_users.all %}
+
               <input class="btn btn-outline-light text-danger" type="submit" value="♥">
             {% else %}
               <input class="btn btn-outline-light text-danger" type="submit" value="♡">
